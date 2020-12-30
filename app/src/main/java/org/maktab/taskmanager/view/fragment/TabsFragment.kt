@@ -33,6 +33,10 @@ private const val ARG_Password = "password"
 private const val ARG_STATE = "state"
 const val FRAGMENT_TAG_INSERT_TASK = "InsertTask"
 const val REQUEST_CODE_INSERT_TASK = 0
+const val FRAGMENT_TAG_EDIT_TASK = "EditTask"
+const val REQUEST_CODE_EDIT_TASK = 1
+const val FRAGMENT_TAG_DELETE_ALL_TASK = "DeleteAllTask"
+const val REQUEST_CODE_DELETE_ALL_TASK = 2
 
 class TabsFragment : Fragment() {
     private lateinit var username: String
@@ -46,6 +50,7 @@ class TabsFragment : Fragment() {
     private var isVisible: Boolean? = false
     private lateinit var mUser: User
     private lateinit var mActivity: FragmentActivity
+    private var mFragment: TabsFragment = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,11 +94,10 @@ class TabsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data == null) return
 
-        if (requestCode == REQUEST_CODE_INSERT_TASK) {
+        if (requestCode == REQUEST_CODE_INSERT_TASK || requestCode == REQUEST_CODE_EDIT_TASK) {
             updateUI()
         }
 
-        // || requestCode == REQUEST_CODE_EDIT_TASK
     }
 
     override fun onCreateView(
@@ -152,7 +156,7 @@ class TabsFragment : Fragment() {
 
     private fun updateAdapter() {
         if (mAdapter == null) {
-            mAdapter = TabsAdapter(mTasks, mActivity)
+            mAdapter = TabsAdapter(mTasks, mActivity,mFragment)
             fragmentTabsBinding.recycler.adapter = mAdapter
         } else {
             mAdapter!!.setTasks(mTasks)
@@ -192,8 +196,12 @@ class TabsFragment : Fragment() {
         private val mTextViewDate: TextView
         private val mImageViewProfile: ImageView
         private var mTask: Task? = null
-        fun bindTaskTabs(task: Task) {
+        private lateinit var mActivity: FragmentActivity
+        private lateinit var mFragment: TabsFragment
+        fun bindTaskTabs(task: Task, activity: FragmentActivity,fragment: TabsFragment) {
             mTask = task
+            mActivity = activity
+            mFragment = fragment
             mTextViewTitle.text = task.getTitle()
             val date = createDateFormat(task)
             mTextViewDate.text = date
@@ -223,22 +231,23 @@ class TabsFragment : Fragment() {
             mTextViewTitle = itemView.findViewById(R.id.txtview_title)
             mTextViewDate = itemView.findViewById(R.id.txtview_date)
             mImageViewProfile = itemView.findViewById(R.id.image_profile)
-            /*itemView.setOnClickListener {
-                val editTaskFragment: EditTaskFragment =
-                    EditTaskFragment.newInstance(mTask!!.getId(), true)
+            itemView.setOnClickListener {
+                val editTaskFragment = EditTaskFragment.newInstance(mTask!!.getId()!!, true)
+
                 editTaskFragment.setTargetFragment(
-                    this@TabsFragment,
-                    TabsFragment.REQUEST_CODE_EDIT_TASK
+                    mFragment,
+                    REQUEST_CODE_EDIT_TASK
                 )
                 editTaskFragment.show(
-                    getActivity().getSupportFragmentManager(),
-                    TabsFragment.FRAGMENT_TAG_EDIT_TASK
+                    mActivity.supportFragmentManager,
+                    FRAGMENT_TAG_EDIT_TASK
                 )
-            }*/
+            }
         }
     }
 
-    private class TabsAdapter(val tasks: List<Task>,val mActivity: FragmentActivity) :
+    private class TabsAdapter(val tasks: List<Task>, val mActivity: FragmentActivity,
+    val mFragment: TabsFragment) :
         RecyclerView.Adapter<TabsHolder>() {
 
         private var mTasks: List<Task?> = tasks
@@ -259,7 +268,7 @@ class TabsFragment : Fragment() {
 
         override fun onBindViewHolder(holder: TabsHolder, position: Int) {
             val task = tasks[position]
-            holder.bindTaskTabs(task)
+            holder.bindTaskTabs(task, mActivity,mFragment)
         }
     }
 }
