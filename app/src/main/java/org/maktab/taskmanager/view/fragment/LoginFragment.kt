@@ -1,4 +1,4 @@
-package org.maktab.taskmanager.view
+package org.maktab.taskmanager.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,8 @@ import org.maktab.taskmanager.R
 import org.maktab.taskmanager.data.model.User
 import org.maktab.taskmanager.data.repository.UserDBRepository
 import org.maktab.taskmanager.databinding.FragmentLoginBinding
+import org.maktab.taskmanager.view.activity.SignUpActivity
+import org.maktab.taskmanager.view.activity.TaskListActivity
 import java.util.*
 
 
@@ -131,18 +133,13 @@ class LoginFragment : Fragment() {
             fragmentLoginBinding.passwordFormLogin.setError("Field cannot be empty!")
             return false
         }
-        if (user == null) {
+        val inputUsername: String? = user.getUsername()
+        val inputPassword: String? = user.getPassword()
+        if (fragmentLoginBinding.usernameLogin.text.toString() != inputUsername ||
+            fragmentLoginBinding.passwordLogin.text.toString() != inputPassword
+        ) {
             callToast(R.string.toast_login)
             return false
-        } else {
-            val inputUsername: String? = user.getUsername()
-            val inputPassword: String? = user.getPassword()
-            if (fragmentLoginBinding.usernameLogin.text.toString() != inputUsername ||
-                fragmentLoginBinding.passwordLogin.text.toString() != inputPassword
-            ) {
-                callToast(R.string.toast_login)
-                return false
-            }
         }
         fragmentLoginBinding.usernameFormLogin.setErrorEnabled(false)
         fragmentLoginBinding.passwordFormLogin.setErrorEnabled(false)

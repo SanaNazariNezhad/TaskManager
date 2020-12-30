@@ -1,4 +1,4 @@
-package org.maktab.taskmanager.view
+package org.maktab.taskmanager.view.activity
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

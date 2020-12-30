@@ -1,4 +1,4 @@
-package org.maktab.taskmanager.view
+package org.maktab.taskmanager.view.fragment
 
 import android.app.Activity
 import android.content.Intent

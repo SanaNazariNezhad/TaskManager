@@ -8,6 +8,8 @@
     <string name="login_as_admin">Login as Admin</string>
     <string name="toast_admin">The admin username and password are incorrect!</string>
     <string name="toast_login">The Username or Password entered are incorrect</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="empty_task_list">You Don\'t Have Any Tasks.</string>
+    <string name="fab_insert">  Insert  </string>
+    <string name="fab_delete">  Delete  </string>
+    <string name="fab_logOut">  LogOut  </string>
 </resources>
