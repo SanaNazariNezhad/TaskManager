@@ -17,13 +17,13 @@ import org.maktab.taskmanager.view.activity.TaskListActivity
 import java.util.*
 
 
+private const val REQUEST_CODE_SIGN_UP = 0
+private const val BUNDLE_KEY_USERNAME = "UserBundle"
+private const val BUNDLE_KEY_PASSWORD = "passBundle"
 class LoginFragment : Fragment() {
 
-    private var user: String? = null
-    private var pass: String? = null
-    val REQUEST_CODE_SIGN_UP = 0
-    val BUNDLE_KEY_USERNAME = "UserBundle"
-    val BUNDLE_KEY_PASSWORD = "passBundle"
+    private lateinit var user: String
+    private lateinit var pass: String
     private lateinit var fragmentLoginBinding: FragmentLoginBinding
     private lateinit var mUserRepository: UserDBRepository
 
@@ -33,8 +33,8 @@ class LoginFragment : Fragment() {
         arguments?.let {
             mUserRepository = UserDBRepository.getInstance(activity!!)!!
             if (savedInstanceState != null) {
-                user = savedInstanceState.getString(BUNDLE_KEY_USERNAME)
-                pass = savedInstanceState.getString(BUNDLE_KEY_PASSWORD)
+                user = savedInstanceState.getString(BUNDLE_KEY_USERNAME).toString()
+                pass = savedInstanceState.getString(BUNDLE_KEY_PASSWORD).toString()
             }
         }
     }
@@ -69,14 +69,14 @@ class LoginFragment : Fragment() {
 
     private fun listeners() {
         fragmentLoginBinding.btnLoginLogin.setOnClickListener(View.OnClickListener {
-            fragmentLoginBinding.usernameFormLogin.setErrorEnabled(false)
-            fragmentLoginBinding.passwordFormLogin.setErrorEnabled(false)
+            fragmentLoginBinding.usernameFormLogin.isErrorEnabled = false
+            fragmentLoginBinding.passwordFormLogin.isErrorEnabled = false
             if (validateInput()) {
 
                 val intent: Intent = TaskListActivity.newIntent(
                     activity,
-                    fragmentLoginBinding.usernameLogin.getText().toString(),
-                    fragmentLoginBinding.passwordLogin.getText().toString()
+                    fragmentLoginBinding.usernameLogin.text.toString(),
+                    fragmentLoginBinding.passwordLogin.text.toString()
                 )
                 startActivity(intent)
             }
@@ -117,20 +117,20 @@ class LoginFragment : Fragment() {
         if (fragmentLoginBinding.usernameLogin.text.toString().trim { it <= ' ' }.isEmpty()
             && fragmentLoginBinding.passwordLogin.text.toString().trim { it <= ' ' }.isEmpty()
         ) {
-            fragmentLoginBinding.usernameFormLogin.setErrorEnabled(true)
-            fragmentLoginBinding.usernameFormLogin.setError("Field cannot be empty!")
-            fragmentLoginBinding.passwordFormLogin.setErrorEnabled(true)
-            fragmentLoginBinding.passwordFormLogin.setError("Field cannot be empty!")
+            fragmentLoginBinding.usernameFormLogin.isErrorEnabled = true
+            fragmentLoginBinding.usernameFormLogin.error = "Field cannot be empty!"
+            fragmentLoginBinding.passwordFormLogin.isErrorEnabled = true
+            fragmentLoginBinding.passwordFormLogin.error = "Field cannot be empty!"
             return false
         } else if (fragmentLoginBinding.usernameLogin.text.toString().trim { it <= ' ' }
                 .isEmpty()) {
-            fragmentLoginBinding.usernameFormLogin.setErrorEnabled(true)
-            fragmentLoginBinding.usernameFormLogin.setError("Field cannot be empty!")
+            fragmentLoginBinding.usernameFormLogin.isErrorEnabled = true
+            fragmentLoginBinding.usernameFormLogin.error = "Field cannot be empty!"
             return false
         } else if (fragmentLoginBinding.passwordLogin.text.toString().trim { it <= ' ' }
                 .isEmpty()) {
-            fragmentLoginBinding.passwordFormLogin.setErrorEnabled(true)
-            fragmentLoginBinding.passwordFormLogin.setError("Field cannot be empty!")
+            fragmentLoginBinding.passwordFormLogin.isErrorEnabled = true
+            fragmentLoginBinding.passwordFormLogin.error = "Field cannot be empty!"
             return false
         }
         if (user == null) {
@@ -146,8 +146,8 @@ class LoginFragment : Fragment() {
                 return false
             }
         }
-        fragmentLoginBinding.usernameFormLogin.setErrorEnabled(false)
-        fragmentLoginBinding.passwordFormLogin.setErrorEnabled(false)
+        fragmentLoginBinding.usernameFormLogin.isErrorEnabled = false
+        fragmentLoginBinding.passwordFormLogin.isErrorEnabled = false
         return true
     }
 

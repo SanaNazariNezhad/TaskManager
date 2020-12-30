@@ -6,23 +6,20 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "user")
-class User {
+class User(
+    @ColumnInfo(name = "username")
+    private var mUsername: String?,
+    @ColumnInfo(name = "password")
+    private var mPassword: String?
+) {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "user_id")
     private var primaryId: Long = 0
 
-    @ColumnInfo(name = "username")
-    private var mUsername: String? = null
-
-    @ColumnInfo(name = "password")
-    private var mPassword: String? = null
-
     @ColumnInfo(name = "date")
     private var mDate: Date? = null
 
-    constructor(mUsername: String?, mPassword: String?) {
-        this.mUsername = mUsername
-        this.mPassword = mPassword
+    init {
         this.mDate = Date()
     }
 

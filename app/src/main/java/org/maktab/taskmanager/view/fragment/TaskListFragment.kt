@@ -21,28 +21,28 @@ private const val ARG_Username = "username";
 private const val ARG_Password = "password";
 
 class TaskListFragment : Fragment() {
-    private var username: String? = null
-    private var password: String? = null
+    private lateinit var username: String
+    private lateinit var password: String
     private lateinit var fragmentTaskListBinding: FragmentTaskListBinding
-    private var mRepository: IUserRepository? = null
-    private var mUser: User? = null
-    private var mViewPagerAdapter: ViewPagerAdapter? = null
-    private var mFragmentTodo: TabsFragment? = null
-    private  var mFragmentDoing:TabsFragment? = null
-    private  var mFragmentDone:TabsFragment? = null
+    private lateinit var mRepository: IUserRepository
+    private lateinit var mUser: User
+    private lateinit var mViewPagerAdapter: ViewPagerAdapter
+    private lateinit var mFragmentTodo: TabsFragment
+    private  lateinit var mFragmentDoing:TabsFragment
+    private  lateinit var mFragmentDone:TabsFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            username = it.getString(ARG_Username)
-            password = it.getString(ARG_Password)
+            username = it.getString(ARG_Username).toString()
+            password = it.getString(ARG_Password).toString()
         }
         setHasOptionsMenu(true)
-        mFragmentTodo = TabsFragment.newInstance(username!!, password!!, "todo")
-        mFragmentDoing = TabsFragment.newInstance(username!!, password!!, "doing")
-        mFragmentDone = TabsFragment.newInstance(username!!, password!!, "done")
-        mRepository = activity?.let { UserDBRepository.getInstance(it) }
-        mUser = mRepository?.getUser(username!!, password!!)
+        mFragmentTodo = TabsFragment.newInstance(username, password, "todo")
+        mFragmentDoing = TabsFragment.newInstance(username, password, "doing")
+        mFragmentDone = TabsFragment.newInstance(username, password, "done")
+        mRepository = UserDBRepository.getInstance(activity!!)!!
+        mUser = mRepository.getUser(username, password)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -51,18 +51,18 @@ class TaskListFragment : Fragment() {
         updateSubtitle()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+    /*override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.app_bar_search -> {
                 val search = item.tooltipText as String
-                /*val intent: Intent =
+                *//*val intent: Intent =
                     SearchActivity.newIntent(activity, search, mUser!!.getPrimaryId())
-                startActivity(intent)*/
+                startActivity(intent)*//*
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
+    }*/
 
     private fun updateSubtitle() {
         val activity = activity as AppCompatActivity
@@ -85,18 +85,18 @@ class TaskListFragment : Fragment() {
     }
 
     private fun updateView() {
-        fragmentTaskListBinding.viewpager!!.registerOnPageChangeCallback(object : OnPageChangeCallback() {
+        fragmentTaskListBinding.viewpager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 when (position) {
                     0 -> {
-                        mFragmentTodo!!.userVisibleHint = true
+                        mFragmentTodo.userVisibleHint = true
                     }
                     1 -> {
-                        mFragmentDoing!!.userVisibleHint = true
+                        mFragmentDoing.userVisibleHint = true
                     }
                     else -> {
-                        mFragmentDone!!.userVisibleHint = true
+                        mFragmentDone.userVisibleHint = true
                     }
                 }
             }
@@ -105,14 +105,12 @@ class TaskListFragment : Fragment() {
 
     private fun initTab() {
         addTabs()
-        fragmentTaskListBinding.tabs!!.tabGravity = TabLayout.GRAVITY_FILL
-        mViewPagerAdapter =
-            activity?.let {
-                ViewPagerAdapter(
-                    it, fragmentTaskListBinding.tabs.tabCount, username, password
+        fragmentTaskListBinding.tabs.tabGravity = TabLayout.GRAVITY_FILL
+        mViewPagerAdapter = ViewPagerAdapter(activity!!,
+                    fragmentTaskListBinding.tabs.tabCount, username, password
                 )
-            }
-        fragmentTaskListBinding.viewpager!!.adapter = mViewPagerAdapter
+
+        fragmentTaskListBinding.viewpager.adapter = mViewPagerAdapter
         fragmentTaskListBinding.viewpager.registerOnPageChangeCallback(object : OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

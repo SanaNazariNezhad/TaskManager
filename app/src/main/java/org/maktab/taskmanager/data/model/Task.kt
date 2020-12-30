@@ -6,7 +6,14 @@ import androidx.room.PrimaryKey
 import java.util.*
 
 @Entity(tableName = "task")
-class Task {
+class Task() {
+    constructor(title: String, description: String, date: Date, state: String) : this() {
+        mId = UUID.randomUUID()
+        mTitle = title
+        mDescription = description
+        mDate = date
+        mState = state
+    }
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "task_id")
@@ -83,14 +90,6 @@ class Task {
     }
 
     fun setState(state: String?) {
-        mState = state
-    }
-
-    fun Task(title: String?, description: String?, date: Date?, state: String?) {
-        mId = UUID.randomUUID()
-        mTitle = title
-        mDescription = description
-        mDate = date
         mState = state
     }
 

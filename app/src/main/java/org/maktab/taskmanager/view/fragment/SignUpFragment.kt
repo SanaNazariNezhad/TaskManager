@@ -17,23 +17,24 @@ import java.util.*
 
 private const val ARG_USERNAME = "username";
 private const val ARG_PASSWORD = "password";
+private const val EXTRA_USERNAME_SIGN_UP = "extraUsername"
+private const val EXTRA_PASSWORD_SIGN_UP = "EXTRA_password"
 
 class SignUpFragment : Fragment() {
 
-    val EXTRA_USERNAME_SIGN_UP = "extraUsername"
-    val EXTRA_PASSWORD_SIGN_UP = "EXTRA_password"
-    private var username: String? = null
-    private var password: String? = null
-    private var mUserRepository: UserDBRepository? = null
+
+    private lateinit var username: String
+    private lateinit var password: String
+    private lateinit var mUserRepository: UserDBRepository
     private lateinit var fragmentSignUpBinding: FragmentSignUpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            username = it.getString(ARG_USERNAME)
-            password = it.getString(ARG_PASSWORD)
+            username = it.getString(ARG_USERNAME).toString()
+            password = it.getString(ARG_PASSWORD).toString()
         }
-        mUserRepository = UserDBRepository.getInstance(activity!!)
+        mUserRepository = UserDBRepository.getInstance(activity!!)!!
     }
 
     override fun onCreateView(
@@ -58,8 +59,8 @@ class SignUpFragment : Fragment() {
 
     private fun listener() {
         fragmentSignUpBinding.btnSignUpSignUP.setOnClickListener(View.OnClickListener {
-            fragmentSignUpBinding.usernameFormSignUp.setErrorEnabled(false)
-            fragmentSignUpBinding.passwordFormSignUp.setErrorEnabled(false)
+            fragmentSignUpBinding.usernameFormSignUp.isErrorEnabled = false
+            fragmentSignUpBinding.passwordFormSignUp.isErrorEnabled = false
             if (validateInput()) {
                 setUserPassResult()
                 activity!!.finish()
@@ -71,7 +72,7 @@ class SignUpFragment : Fragment() {
         val username: String = Objects.requireNonNull(fragmentSignUpBinding.usernameSignUp.text).toString()
         val password: String = Objects.requireNonNull(fragmentSignUpBinding.passwordSignUp.text).toString()
         val user = User(username, password)
-        mUserRepository!!.insertUser(user)
+        mUserRepository.insertUser(user)
         val intent = Intent()
         intent.putExtra(
             EXTRA_USERNAME_SIGN_UP,
