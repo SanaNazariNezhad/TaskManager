@@ -94,7 +94,8 @@ class TabsFragment : Fragment() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode != Activity.RESULT_OK || data == null) return
 
-        if (requestCode == REQUEST_CODE_INSERT_TASK || requestCode == REQUEST_CODE_EDIT_TASK) {
+        if (requestCode == REQUEST_CODE_INSERT_TASK || requestCode == REQUEST_CODE_EDIT_TASK ||
+                requestCode == REQUEST_CODE_DELETE_ALL_TASK) {
             updateUI()
         }
 
@@ -136,15 +137,15 @@ class TabsFragment : Fragment() {
             )
         })
         fragmentTabsBinding.fabDelete.setOnClickListener(View.OnClickListener {
-            /*val deleteAllFragment: DeleteAllFragment = DeleteAllFragment.newInstance()
+            val deleteAllFragment: DeleteAllFragment = DeleteAllFragment.newInstance()
             deleteAllFragment.setTargetFragment(
                 this@TabsFragment,
-                TabsFragment.REQUEST_CODE_DELETE_ALL_TASK
+                REQUEST_CODE_DELETE_ALL_TASK
             )
             deleteAllFragment.show(
                 activity!!.supportFragmentManager,
-                TabsFragment.FRAGMENT_TAG_DELETE_ALL_TASK
-            )*/
+                FRAGMENT_TAG_DELETE_ALL_TASK
+            )
         })
         fragmentTabsBinding.fabLogOut.setOnClickListener(View.OnClickListener { activity!!.finish() })
     }
@@ -192,9 +193,9 @@ class TabsFragment : Fragment() {
     }
 
     private class TabsHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        private val mTextViewTitle: TextView
-        private val mTextViewDate: TextView
-        private val mImageViewProfile: ImageView
+        private val mTextViewTitle: TextView = itemView.findViewById(R.id.txtview_title)
+        private val mTextViewDate: TextView = itemView.findViewById(R.id.txtview_date)
+        private val mImageViewProfile: ImageView = itemView.findViewById(R.id.image_profile)
         private var mTask: Task? = null
         private lateinit var mActivity: FragmentActivity
         private lateinit var mFragment: TabsFragment
@@ -228,9 +229,6 @@ class TabsFragment : Fragment() {
             private get() = SimpleDateFormat("h:mm a")
 
         init {
-            mTextViewTitle = itemView.findViewById(R.id.txtview_title)
-            mTextViewDate = itemView.findViewById(R.id.txtview_date)
-            mImageViewProfile = itemView.findViewById(R.id.image_profile)
             itemView.setOnClickListener {
                 val editTaskFragment = EditTaskFragment.newInstance(mTask!!.getId()!!, true)
 
@@ -267,8 +265,10 @@ class TabsFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: TabsHolder, position: Int) {
-            val task = tasks[position]
-            holder.bindTaskTabs(task, mActivity,mFragment)
+            val task = mTasks[position]
+            if (task != null) {
+                holder.bindTaskTabs(task, mActivity,mFragment)
+            }
         }
     }
 }
