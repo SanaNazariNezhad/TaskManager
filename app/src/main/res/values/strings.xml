@@ -12,4 +12,5 @@
     <string name="fab_insert">  Insert  </string>
     <string name="fab_delete">  Delete  </string>
     <string name="fab_logOut">  LogOut  </string>
+    <string name="search">Search</string>
 </resources>
