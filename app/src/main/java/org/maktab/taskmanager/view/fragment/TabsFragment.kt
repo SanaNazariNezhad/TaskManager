@@ -168,11 +168,11 @@ class TabsFragment : Fragment() {
     private fun checkEmptyLayout() {
         when {
             state.equals("todo", ignoreCase = true) ->
-                mTasks = mRepository.getTodoTask(mUser.getPrimaryId())
+                mTasks = mRepository.getTodoTask(mUser.primaryId)
             state.equals("doing", ignoreCase = true) ->
-                mTasks = mRepository.getDoingTask(mUser.getPrimaryId())
+                mTasks = mRepository.getDoingTask(mUser.primaryId)
             state.equals("done", ignoreCase = true) ->
-                mTasks = mRepository.getDoneTask(mUser.getPrimaryId())
+                mTasks = mRepository.getDoneTask(mUser.primaryId)
         }
 
         if (mTasks.isEmpty())
@@ -203,11 +203,11 @@ class TabsFragment : Fragment() {
             mTask = task
             mActivity = activity
             mFragment = fragment
-            mTextViewTitle.text = task.getTitle()
+            mTextViewTitle.text = task.mTitle
             val date = createDateFormat(task)
             mTextViewDate.text = date
             val color = Color.parseColor("#ff80aa")
-            val string = task.getTitle()!!.substring(0, 1)
+            val string = task.mTitle!!.substring(0, 1)
             val drawable = TextDrawable.builder()
                 .buildRound(string, color)
             mImageViewProfile.setImageDrawable(drawable)
@@ -216,9 +216,9 @@ class TabsFragment : Fragment() {
         private fun createDateFormat(task: Task): String {
             var totalDate = ""
             val dateFormat = dateFormat
-            val date = dateFormat.format(task.getDate())
+            val date = dateFormat.format(task.mDate)
             val timeFormat = timeFormat
-            val time = timeFormat.format(task.getDate())
+            val time = timeFormat.format(task.mDate)
             totalDate = "$date  $time"
             return totalDate
         }
@@ -230,7 +230,7 @@ class TabsFragment : Fragment() {
 
         init {
             itemView.setOnClickListener {
-                val editTaskFragment = EditTaskFragment.newInstance(mTask!!.getId()!!, true)
+                val editTaskFragment = EditTaskFragment.newInstance(mTask!!.mId!!, true)
 
                 editTaskFragment.setTargetFragment(
                     mFragment,

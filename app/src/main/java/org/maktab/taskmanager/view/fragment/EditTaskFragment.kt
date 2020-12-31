@@ -112,26 +112,26 @@ class EditTaskFragment : DialogFragment() {
     }
 
     private fun setData(task: Task) {
-        fragmentEditTaskBinding.titleEdit.setText(task.getTitle())
+        fragmentEditTaskBinding.titleEdit.setText(task.mTitle)
         fragmentEditTaskBinding.titleFormEdit.isEnabled = false
-        fragmentEditTaskBinding.descriptionEdit.setText(task.getDescription())
+        fragmentEditTaskBinding.descriptionEdit.setText(task.mDescription)
         fragmentEditTaskBinding.descriptionFormEdit.isEnabled = false
         val dateFormat = getDateFormat()
-        fragmentEditTaskBinding.btnDateEdit.text = dateFormat.format(task.getDate())
+        fragmentEditTaskBinding.btnDateEdit.text = dateFormat.format(task.mDate)
         fragmentEditTaskBinding.btnDateEdit.isEnabled = false
         val timeFormat = getTimeFormat()
-        fragmentEditTaskBinding.btnTimeEdit.text = timeFormat.format(task.getDate())
+        fragmentEditTaskBinding.btnTimeEdit.text = timeFormat.format(task.mDate)
         fragmentEditTaskBinding.btnTimeEdit.isEnabled = false
         when {
-            task.getState().equals("Todo", ignoreCase = true) -> {
+            task.mState.equals("Todo", ignoreCase = true) -> {
                 fragmentEditTaskBinding.radioBtnTodoEdit.isChecked = true
                 mState = "Todo"
             }
-            task.getState().equals("Doing", ignoreCase = true) -> {
+            task.mState.equals("Doing", ignoreCase = true) -> {
                 fragmentEditTaskBinding.radioBtnDoingEdit.isChecked = true
                 mState = "Doing"
             }
-            task.getState().equals("Done", ignoreCase = true) -> {
+            task.mState.equals("Done", ignoreCase = true) -> {
                 fragmentEditTaskBinding.radioBtnDoneEdit.isChecked = true
                 mState = "Done"
             }
@@ -273,9 +273,9 @@ class EditTaskFragment : DialogFragment() {
     }
 
     private fun shareWord(): String? {
-        val title = mTask.getTitle()
-        val description = mTask.getDescription()
-        val date = mTask.getDate().toString()
+        val title = mTask.mTitle
+        val description = mTask.mDescription
+        val date = mTask.mDate.toString()
         val state: String = mState.toString()
         return getString(
             R.string.shareMassage,
@@ -311,10 +311,10 @@ class EditTaskFragment : DialogFragment() {
             fragmentEditTaskBinding.radioBtnDoingEdit.isChecked -> state = "Doing"
             fragmentEditTaskBinding.radioBtnDoneEdit.isChecked -> state = "Done"
         }
-        mTask.setTitle(fragmentEditTaskBinding.titleEdit.text.toString())
-        mTask.setDescription(fragmentEditTaskBinding.descriptionEdit.text.toString())
-        mTask.setDate(mCalendar.time)
-        mTask.setState(state)
+        mTask.mTitle = fragmentEditTaskBinding.titleEdit.text.toString()
+        mTask.mDescription = fragmentEditTaskBinding.descriptionEdit.text.toString()
+        mTask.mDate = mCalendar.time
+        mTask.mState=state
     }
 
     private fun updateTasks(task: Task) {

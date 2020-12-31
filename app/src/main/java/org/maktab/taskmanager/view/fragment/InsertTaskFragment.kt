@@ -234,11 +234,11 @@ class InsertTaskFragment : DialogFragment() {
             insertTaskBinding.radioBtnDone.isChecked -> state = "Done"
         }
 
-        mTask.setTitle(insertTaskBinding.titleInsert.text.toString())
-        mTask.setDescription(insertTaskBinding.descriptionInsert.text.toString())
-        mTask.setDate(mCalendar.time)
-        mTask.setState(state)
-        mTask.setUserIdFk(mUser.getPrimaryId())
+        mTask.mTitle=insertTaskBinding.titleInsert.text.toString()
+        mTask.mDescription=insertTaskBinding.descriptionInsert.text.toString()
+        mTask.mDate=mCalendar.time
+        mTask.mState=state
+        mTask.userIdFk=mUser.primaryId
     }
 
     private fun insertTaskToRepository(task: Task) {

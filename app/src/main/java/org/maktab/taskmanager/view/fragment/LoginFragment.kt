@@ -137,8 +137,8 @@ class LoginFragment : Fragment() {
             callToast(R.string.toast_login)
             return false
         } else {
-            val inputUsername: String? = user.getUsername()
-            val inputPassword: String? = user.getPassword()
+            val inputUsername: String? = user.mUsername
+            val inputPassword: String? = user.mPassword
             if (fragmentLoginBinding.usernameLogin.text.toString() != inputUsername ||
                 fragmentLoginBinding.passwordLogin.text.toString() != inputPassword
             ) {
